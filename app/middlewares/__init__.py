@@ -1,0 +1,1 @@
+from app.middlewares.auth_middleware import AuthMiddleware as auth_middleware

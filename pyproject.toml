@@ -1,0 +1,32 @@
+[project]
+name = "be-chatur"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bcrypt>=4.3.0",
+    "beanie>=1.29.0",
+    "bs4>=0.0.2",
+    "celery>=5.4.0",
+    "fastapi[standard]>=0.115.11",
+    "google-api-python-client>=2.164.0",
+    "google-auth>=2.38.0",
+    "jose>=1.0.0",
+    "langchain-community==0.3.17",
+    "langchain-core==0.3.34",
+    "langchain-openai==0.3.4",
+    "langgraph==0.2.70",
+    "langgraph-checkpoint-mongodb==0.1.0",
+    "mammoth>=1.9.0",
+    "openai>=1.66.3",
+    "passlib>=1.7.4",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "pyjwt>=2.10.1",
+    "pypdf2>=3.0.1",
+    "python-jose>=3.4.0",
+    "tenacity>=9.0.0",
+    "uvicorn>=0.34.0",
+    "sendgrid",
+]

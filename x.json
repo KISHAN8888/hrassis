@@ -1,0 +1,53 @@
+{
+    "user_id": "660b2a72b2f1c2a1ef9d1234",
+    "chat_id": "chat_456_xyz",
+    "jd_id": "660e9bcdd3f5f3c2ff891234",
+    "parsed_resume": {
+      "name": "Kishan Tripathi",
+      "email": "kishan@example.com",
+      "phone": "+91-9876543210",
+      "skills": ["Python", "FastAPI", "LangChain", "MongoDB", "LLMs"],
+      "education": [
+        {
+          "degree": "B.Tech",
+          "major": "Computer Science",
+          "institution": "IIT Bombay",
+          "year": 2022
+        }
+      ],
+      "experience": [
+        {
+          "company": "Wise Analytica",
+          "role": "AI Developer",
+          "duration": "2 years",
+          "responsibilities": [
+            "Built NLP pipelines",
+            "Trained GPT models",
+            "Integrated LangGraph with FastAPI"
+          ]
+        }
+      ]
+    },
+    "attribute_scores": {
+      "technical_skills": 0.92,
+      "communication": 0.85,
+      "teamwork": 0.88,
+      "experience_match": 0.95,
+      "education_match": 0.9
+    },
+    "candidate_resume": "https://resumes.example.com/kishan_tripathi_resume.pdf",
+    "token_usage": {
+      "input_tokens": 1872,
+      "output_tokens": 523,
+      "total_tokens": 2395
+    },
+    "cost": {
+      "input_cost_usd": 0.03744,
+      "output_cost_usd": 0.01046,
+      "total_cost_usd": 0.04790
+    },
+    "status": "ACCEPTED",
+    "created_at": "2025-04-08T14:30:00Z",
+    "updated_at": "2025-04-08T14:30:00Z"
+}
+  

@@ -1,0 +1,113 @@
+version: '3.8'
+
+networks:
+  chature_net:
+    driver: overlay
+
+services:
+  api:
+    image: 10.122.32.4:5000/fastapi-app:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: amqp://guest:guest@10.122.32.3:5672//
+      CELERY_RESULT_BACKEND: rpc://
+      RESUME_UPLOAD_DIR: /app/uploads/resumes
+    volumes:
+      - type: volume
+        source: resume_uploads
+        target: /app/uploads/resumes
+    networks:
+      - chature_net
+    command: sh -c "mkdir -p /app/uploads/resumes && chmod -R 777 /app/uploads/resumes && uv run uvicorn main:app --host 0.0.0.0 --port 8000"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  jd_resume_worker:
+    image: 10.122.32.4:5000/celery-worker:latest
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: amqp://guest:guest@10.122.32.3:5672//
+      CELERY_RESULT_BACKEND: rpc://
+      RESUME_UPLOAD_DIR: /app/uploads/resumes
+    volumes:
+      - type: volume
+        source: resume_uploads
+        target: /app/uploads/resumes
+    networks:
+      - chature_net
+    command: -A app.tasks.celery_app worker -Q job_description,resumes,assessments --loglevel=info --autoscale=28,5
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      replicas: 1
+
+  # resume_worker:
+  #   image: 10.122.32.4:5000/celery-worker:latest
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     CELERY_BROKER_URL: amqp://guest:guest@10.122.32.3:5672//
+  #     CELERY_RESULT_BACKEND: rpc://
+  #     RESUME_UPLOAD_DIR: /app/uploads/resumes
+  #   volumes:
+  #     - type: volume
+  #       source: resume_uploads
+  #       target: /app/uploads/resumes
+  #   networks:
+  #     - chature_net
+  #   command: -A app.tasks.celery_app worker -Q resumes --loglevel=info --autoscale=26,5
+  #   deploy:
+  #     placement:
+  #       constraints:
+  #         - node.role == worker
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 5s
+  #       max_attempts: 3
+  #     replicas: 1
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - type: volume
+        source: rabbitmq_data
+        target: /var/lib/rabbitmq
+    networks:
+      - chature_net
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      replicas: 1
+
+volumes:
+  rabbitmq_data:
+    driver: local
+  resume_uploads:
+    driver: local
